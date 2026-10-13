@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=hover-flow-20261013c">
+<link rel="stylesheet" href="assets/styles.css?v=ui-audit-20261013f">
 </head>
 <body class="assessment-page">
 <header class="site-header">
@@ -72,29 +72,34 @@
       <div class="assessment-result-top">
         <div>
           <div class="eyebrow">Your Growth Profile</div>
-          <p class="assessment-result-code">ASSESSMENT ID <strong id="result-code"></strong></p>
+          <p class="assessment-result-code">ASSESSMENT ID <strong id="result-code"></strong> <button class="assessment-copy-code" id="copy-assessment-code" type="button">Copy</button><span id="copy-code-status" class="visually-hidden" aria-live="polite"></span></p>
         </div>
         <a class="assessment-restart" href="assessment.html?new=1#assessment-intro">Start a new assessment ↗</a>
       </div>
       <div class="assessment-result-hero">
         <div>
-          <span class="assessment-result-label">YOUR PROFILE</span>
-          <h1 class="serif" id="result-profile" tabindex="-1">No Dominant Profile</h1>
+          <span class="assessment-result-label">YOUR GROWTH PATTERN</span>
+          <h1 class="serif" id="result-profile" tabindex="-1">A directional read</h1>
         </div>
         <p id="result-summary">No single pattern is strong enough to define the system.</p>
       </div>
       <section class="assessment-result-section">
-        <div class="assessment-result-section-head"><div><div class="eyebrow">Across your growth system</div><h2 class="serif">The signals in your answers.</h2></div><p>Growth moves through decisions, not a checklist. The shape changes when the constraint changes.</p></div>
+        <div class="assessment-result-section-head"><div><div class="eyebrow">Across your growth system</div><h2 class="serif">The signals in your answers.</h2></div><p>Each category is an average of your self-ratings on a five-point scale. The result is directional: it is not an external benchmark or a diagnosis.</p></div>
         <div class="assessment-score-grid" id="assessment-scores"></div>
+        <div class="assessment-result-highlights">
+          <article><span class="assessment-result-label">A STRENGTH TO BUILD ON</span><h3 class="serif" id="result-strongest-title">Your strongest relative signal</h3><p id="result-strongest-copy"></p></article>
+          <article><span class="assessment-result-label">A SIGNAL TO EXPLORE</span><h3 class="serif" id="result-signal-title">A useful place to investigate</h3><p id="result-signal-copy"></p></article>
+        </div>
+        <p class="assessment-score-key"><span>1</span> Less clarity or consistency&nbsp; <i></i> <span>5</span> More clarity or consistency. A lower score is a prompt to investigate, not a verdict.</p>
       </section>
       <section class="assessment-next-layout">
         <div>
-          <div class="eyebrow">Where we’d look first</div>
+          <div class="eyebrow">A useful place to begin</div>
           <h2 class="serif" id="result-first-title">The constraint determines the next move.</h2>
           <p id="result-first-copy">Your responses don’t point to a single obvious constraint.</p>
         </div>
         <div class="assessment-investigation">
-          <span class="assessment-result-label">WHAT WE’D INVESTIGATE NEXT</span>
+          <span class="assessment-result-label">QUESTIONS TO INVESTIGATE NEXT</span>
           <div id="result-investigations"></div>
         </div>
       </section>
@@ -119,7 +124,7 @@
   </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="assets/site.js?v=hover-flow-20261013c"></script>
+<script src="assets/site.js?v=ui-audit-20261013f"></script>
 <script src="assets/assessment-app.js"></script>
 </body>
 </html>

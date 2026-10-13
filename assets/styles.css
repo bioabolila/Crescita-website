@@ -474,3 +474,52 @@ html.home-deck-scroll .home main>section[data-deck]{scroll-snap-align:start;scro
 @keyframes chapter-interaction-ready{from{opacity:.45;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:760px){html.home-deck-scroll{scroll-padding-top:82px}}
 @media(prefers-reduced-motion:reduce){html.home-deck-scroll{scroll-snap-type:none!important}.home .is-scroll-arriving>*{animation:none!important}}
+
+/* The deck should guide the scroll, not take control away from the reader. */
+html.home-deck-scroll{scroll-snap-type:y proximity;scroll-padding-top:94px;scroll-behavior:smooth}
+html.home-deck-scroll .home main>section[data-deck]{scroll-snap-stop:normal}
+@media(prefers-reduced-motion:reduce){html.home-deck-scroll{scroll-behavior:auto}}
+
+/* Home page insight previews make the new editorial work easy to discover. */
+.home-insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:54px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.home-insight-grid>a{display:flex;min-height:250px;flex-direction:column;padding:21px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .3s ease,transform .3s ease}
+.home-insight-grid>a:hover{background:rgba(38,100,217,.045);transform:translateY(-3px)}
+.home-insight-grid>a>span,.home-insight-grid>a>b{font-size:9px;letter-spacing:.13em;color:var(--blue)}
+.home-insight-grid h3{margin:27px 0 12px;font-size:clamp(27px,3vw,39px);line-height:.98}
+.home-insight-grid p{max-width:300px;margin:0 0 20px;color:var(--muted);font-size:12px;line-height:1.7}
+.home-insight-grid>a>b{margin-top:auto;letter-spacing:0}
+.insights-all-link{display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:600}
+.insights-all-link span{color:var(--blue)}
+.insights-layout{align-items:end}
+.public-case-card{display:grid;grid-template-columns:minmax(260px,.9fr) 1.1fr;gap:clamp(26px,5vw,70px);align-items:stretch;margin-top:46px;padding:20px;border:1px solid var(--line);transition:border-color .25s,background .25s}
+.public-case-card:hover{border-color:var(--blue);background:rgba(38,100,217,.025)}
+.public-case-art{position:relative;display:flex;min-height:300px;flex-direction:column;justify-content:space-between;overflow:hidden;padding:23px;background:var(--navy);color:var(--cream)}
+.public-case-art>span,.public-case-art>b{position:relative;z-index:1;font-size:9px;letter-spacing:.15em;line-height:1.5}
+.public-case-art>b{font:clamp(33px,4.6vw,61px)/.88 var(--serif);letter-spacing:-.035em}
+.public-case-art i{position:absolute;right:-8%;top:21%;width:74%;height:54%;border:1px solid #9bb6f2;transform:skewY(-25deg);opacity:.82}
+.public-case-art i:before,.public-case-art i:after{content:"";position:absolute;left:0;right:0;height:1px;background:#9bb6f266;transform:translateY(52px)}
+.public-case-art i:after{transform:translateY(104px)}
+.public-case-copy{align-self:center;padding:20px 24px 20px 0}
+.public-case-copy h3{max-width:610px;margin:20px 0 14px;font-size:clamp(37px,5.3vw,68px);line-height:.94}
+.public-case-copy p{max-width:560px;color:var(--muted);font-size:13px;line-height:1.75}
+.case-client-space{display:grid;grid-template-columns:1fr minmax(250px,.7fr);gap:35px;align-items:end;margin-top:62px;padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.case-client-space h3{margin:17px 0 0;font-size:clamp(32px,4vw,52px);line-height:.96}
+.case-client-space>p{max-width:430px;margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.assessment-copy-code{margin-left:8px;padding:4px 8px;border:1px solid var(--line);background:transparent;color:var(--blue);font:inherit;letter-spacing:0;cursor:pointer}
+.assessment-copy-code:hover{border-color:var(--blue)}
+.assessment-score-key{display:flex;align-items:center;gap:8px;margin:20px 0 0;color:var(--muted);font-size:10px;line-height:1.6}
+.assessment-score-key>span{color:var(--navy);font-weight:700}
+.assessment-score-key i{width:72px;height:2px;background:linear-gradient(90deg,var(--line),var(--blue));display:inline-block}
+.assessment-result-highlights{display:grid;grid-template-columns:1fr 1fr;margin-top:25px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.assessment-result-highlights article{min-height:150px;padding:19px 22px 21px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.assessment-result-highlights h3{margin:19px 0 8px;font-size:clamp(26px,3vw,38px);line-height:1}
+.assessment-result-highlights p{max-width:470px;margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.calendly-shell{display:flex;flex-direction:column;min-width:0}
+.calendly-loading,.calendly-fallback{margin:0;padding:10px 0;color:var(--muted);font-size:11px;line-height:1.6}
+.calendly-fallback{order:-1}
+.calendly-fallback a{color:var(--blue);font-weight:600}
+.calendly-inline-widget{order:1;width:100%;min-width:0!important;overflow:hidden}
+.calendly-shell.is-failed .calendly-loading{display:none}
+.calendly-shell.is-failed .calendly-fallback{padding:13px 16px;border:1px solid var(--line);background:rgba(38,100,217,.04)}
+@media(max-width:760px){.home-insight-grid{grid-template-columns:1fr;margin-top:34px}.home-insight-grid>a{min-height:205px;padding:18px}.public-case-card{grid-template-columns:1fr;padding:13px}.public-case-art{min-height:220px}.public-case-copy{padding:12px}.case-client-space{grid-template-columns:1fr;gap:16px}.assessment-score-key{align-items:flex-start;flex-wrap:wrap}.calendly-inline-widget{height:700px}}
+@media(max-width:760px){.assessment-result-highlights{grid-template-columns:1fr}}

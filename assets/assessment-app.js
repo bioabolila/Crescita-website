@@ -4,7 +4,7 @@
   const SUPABASE_URL = "https://jgccqzblrlcucvbdayea.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vy7hjPnaim4y8FQkQ52BsQ_TWWlwOlr";
   const ASSESSMENT_VERSION = 1;
-  const SCORING_VERSION = 1;
+  const SCORING_VERSION = 2;
   const alphabet = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
   const categories = [
     { key: "strategy", title: "Strategy", questions: [0, 1, 2], next: "Clarify the growth constraint, priorities, and assumptions driving decisions." },
@@ -292,7 +292,7 @@
     return categories.map(category => {
       const values = category.questions.map(index => scoreByQuestion["Q" + (index + 1)]).filter(Number.isFinite);
       const score = values.reduce((total, value) => total + value, 0) / values.length;
-      return { ...category, score: Math.round(score * 1000) / 1000, state: score < 3.5 ? "Reactive" : (score < 4.5 ? "Building" : "Compounding"), confidence: "High" };
+      return { ...category, score: Math.round(score * 1000) / 1000, state: score < 3.5 ? "Reactive" : (score < 4.5 ? "Building" : "Compounding"), confidence: "Directional" };
     });
   }
 
@@ -300,8 +300,11 @@
     const minScore = Math.min(...scores.map(item => item.score));
     const spread = Math.max(...scores.map(item => item.score)) - minScore;
     const lowest = scores.filter(item => item.score === minScore);
-    if (spread < 0.45 || minScore >= 3.5) return { primary: [], secondary: [], profile: "No Dominant Profile" };
-    return { primary: lowest.map(item => item.key), secondary: [], profile: lowest.length === 1 ? lowest[0].title + " Signal" : "Multiple Growth Signals" };
+    const average = scores.reduce((sum, item) => sum + item.score, 0) / scores.length;
+    const profile = spread < 0.45
+      ? (average >= 4.5 ? "Compounding across the system" : average >= 3.5 ? "Building across the system" : "Strengthen the foundations")
+      : (lowest.length > 1 ? "Connected growth signals" : lowest[0].title + " is a relative signal");
+    return { primary: lowest.map(item => item.key), secondary: [], profile, spread, average };
   }
 
   async function finishAssessment() {
@@ -315,7 +318,7 @@
       const signals = buildSignals(scores);
       const completedAt = new Date().toISOString();
       const statusResult = await client.from("assessments")
-        .update({ status: "completed", current_question: 15, completed_at: completedAt })
+        .update({ status: "completed", current_question: 15, completed_at: completedAt, scoring_version: SCORING_VERSION })
         .eq("id", currentAssessment.id);
       if (statusResult.error) throw statusResult.error;
 
@@ -380,14 +383,14 @@
     const maxScore = Math.max(...values.map(item => item.score));
     if (maxScore - minScore < 0.45) {
       return {
-        title: "The constraint determines the next move.",
-        copy: "Your responses don’t point to a single obvious constraint.",
-        items: [values[0], values[1]]
+        title: "Start with the signal that matters most to your next decision.",
+        copy: "Your scores are close together, so there isn’t a strong relative low point. Choose the area most connected to the decision in front of you, then check it against customer and commercial evidence.",
+        items: [...values].sort((a, b) => a.score - b.score).slice(0, 2)
       };
     }
     return {
-      title: "Start with what is holding growth back.",
-      copy: lowest.length === 1 ? "Your clearest signal is in " + lowest[0].title.toLowerCase() + ". We’d begin by understanding what sits behind that score." : "Several parts of the system are showing a similar signal. We’d look at how they interact before choosing a move.",
+      title: "Start with what the relative signal may be telling you.",
+      copy: lowest.length === 1 ? lowest[0].title + " is your lowest relative score. Treat it as a question to investigate alongside customer behaviour and business context—not as proof of the constraint." : "Several categories share the lowest score. Look at how they connect in the customer journey before deciding which one to address first.",
       items: lowest.length > 1 ? lowest.slice(0, 2) : [lowest[0], ...values.filter(item => item.key !== lowest[0].key).sort((a, b) => a.score - b.score).slice(0, 1)]
     };
   }
@@ -397,22 +400,36 @@
     intro.hidden = true;
     results.hidden = false;
     document.querySelector("#result-code").textContent = currentAssessment.assessment_id;
-    document.querySelector("#result-profile").textContent = result.profile_archetype || "No Dominant Profile";
     const scores = categories.map(item => ({ ...item, score: Number(result[item.key + "_score"]), state: result[item.key + "_state"] || scoreState(Number(result[item.key + "_score"])) }));
-    const scoreSpread = Math.max(...scores.map(item => item.score)) - Math.min(...scores.map(item => item.score));
-    document.querySelector("#result-summary").textContent = scoreSpread < 0.45
-      ? "No single pattern is strong enough to define the system."
-      : "Your answers point to a clear place to investigate before choosing the next move.";
+    const signals = buildSignals(scores);
+    document.querySelector("#result-profile").textContent = signals.profile;
+    const overallAverage = scores.reduce((sum, item) => sum + item.score, 0) / scores.length;
+    const lowest = scores.filter(item => item.score === Math.min(...scores.map(score => score.score)));
+    const highest = scores.filter(item => item.score === Math.max(...scores.map(score => score.score)));
+    document.querySelector("#result-strongest-title").textContent = highest.length === 1 ? highest[0].title : "Several areas are similarly rated";
+    document.querySelector("#result-strongest-copy").textContent = highest.length === 1
+      ? "Your highest relative rating is " + highest[0].score.toFixed(1) + " out of 5. Consider how this area supports the rest of the customer and commercial system."
+      : "Your highest scores are close together. Look at how these strengths reinforce one another in the customer journey.";
+    document.querySelector("#result-signal-title").textContent = lowest.length === 1 ? lowest[0].title : "Several areas to explore";
+    document.querySelector("#result-signal-copy").textContent = signals.spread < 0.45
+      ? "Your scores are clustered. Use business context and the decision in front of you to choose where to look first."
+      : lowest.length === 1
+        ? "This is your lowest relative rating at " + lowest[0].score.toFixed(1) + " out of 5. Check it against customer conversations and operating evidence before treating it as a constraint."
+        : "These categories share your lowest relative score. Look for a connection between them before choosing a specific intervention.";
+    document.querySelector("#result-summary").textContent = signals.spread < 0.45
+      ? "Your average self-rating is " + overallAverage.toFixed(1) + " out of 5, with scores clustered across the six areas. Use this as a broad reflection, then choose the area most relevant to your next decision."
+      : "Your average self-rating is " + overallAverage.toFixed(1) + " out of 5. " + (lowest.length === 1 ? lowest[0].title + " sits lowest relative to your other areas; explore what may be behind that signal." : lowest.map(item => item.title).join(" and ") + " share the lowest relative score. Explore how those areas may connect.");
     const scoreGrid = document.querySelector("#assessment-scores");
     scoreGrid.replaceChildren();
     scores.forEach(item => {
       const card = document.createElement("article");
       card.className = "assessment-score-card";
-      card.innerHTML = '<div class="assessment-score-card-top"><span class="assessment-result-label"></span><span class="assessment-score-state"></span></div><h3 class="serif"></h3><div class="assessment-score-number"></div><div class="assessment-score-rule"><i></i></div>';
+      card.innerHTML = '<div class="assessment-score-card-top"><span class="assessment-result-label"></span><span class="assessment-score-state"></span></div><h3 class="serif"></h3><div class="assessment-score-number"></div><div class="assessment-score-rule" role="img"><i></i></div>';
       card.querySelector(".assessment-result-label").textContent = item.title.toUpperCase();
       card.querySelector(".assessment-score-state").textContent = item.state;
       card.querySelector("h3").textContent = item.title;
       card.querySelector(".assessment-score-number").textContent = item.score.toFixed(1);
+      card.querySelector(".assessment-score-rule").setAttribute("aria-label", item.title + " score: " + item.score.toFixed(1) + " out of 5");
       card.querySelector(".assessment-score-rule i").style.width = (item.score / 5 * 100) + "%";
       scoreGrid.append(card);
     });
@@ -431,10 +448,25 @@
       investigations.append(article);
     });
     document.querySelector("#assessment-booking-link").href = "contact.html?assessment=" + encodeURIComponent(currentAssessment.assessment_id) + "#growth-conversation";
+    document.querySelector("#copy-assessment-code")?.addEventListener("click", copyAssessmentCode, { once: true });
     sessionStorageAdapter.setItem(localKey, currentAssessment.assessment_id);
     recordEvent("result_viewed", { assessment_version: ASSESSMENT_VERSION });
     document.querySelector("#result-profile").focus();
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function copyAssessmentCode() {
+    const code = currentAssessment?.assessment_id || "";
+    const status = document.querySelector("#copy-code-status");
+    try {
+      await navigator.clipboard.writeText(code);
+      status.textContent = "Assessment ID copied.";
+      const button = document.querySelector("#copy-assessment-code");
+      button.textContent = "Copied";
+      button.addEventListener("click", copyAssessmentCode, { once: true });
+    } catch (_) {
+      status.textContent = "Copy is unavailable. Select the assessment ID to copy it.";
+    }
   }
 
   startButton.addEventListener("click", async () => {
