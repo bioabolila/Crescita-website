@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F5F1E9">
+<meta name="description" content="Understand what may be limiting your growth with the Crescita Growth Assessment.">
+<title>Growth Assessment — Crescita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css?v=hover-flow-20261013c">
+</head>
+<body class="assessment-page">
+<header class="site-header">
+  <div class="wrap head-inner">
+    <a class="brand" href="index.html" aria-label="Crescita home"><img class="brand-logo" src="assets/crescita-logo.svg" alt="Crescita"></a>
+    <button class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="site-nav"><i></i><i></i></button>
+    <nav class="nav-panel" id="site-nav" aria-label="Main navigation">
+      <a href="how-we-work.html">How We Work</a><a href="growth-partnership.html">Growth Partnership</a><a href="case-studies.html">Case Studies</a><a href="insights.html">Insights</a><a href="about.html">About</a><a class="nav-cta" href="assessment.html">Take the Assessment <span>↗</span></a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="assessment-intro" id="assessment-intro">
+    <div class="wrap">
+      <div class="assessment-intro-grid">
+        <div>
+          <div class="eyebrow">Crescita Growth Assessment</div>
+          <h1 class="serif">How healthy is your growth?</h1>
+          <p class="assessment-lede">Growth can look busy on the surface while the underlying system is stuck.</p>
+          <button class="button assessment-start" id="start-assessment" type="button">Let’s find out <span>→</span></button>
+          <p class="assessment-error assessment-start-error" id="assessment-start-error" role="alert" aria-live="polite"></p>
+          <p class="assessment-privacy">No name, email, or company is required. Your answers are saved under a unique assessment ID. If you book from your results, that ID is included in the Calendly booking link.</p>
+        </div>
+        <aside class="assessment-overview" aria-label="Assessment overview">
+          <div class="assessment-overview-mark" aria-hidden="true"><span>01</span><i></i><span>15</span></div>
+          <p>Fifteen questions across six parts of your growth system.</p>
+          <div class="assessment-overview-foot"><span>STRATEGY</span><span>ACQUISITION</span><span>CONVERSION</span><span>RETENTION</span><span>ANALYTICS</span><span>EXPERIMENTATION</span></div>
+        </aside>
+      </div>
+      <div class="assessment-intro-foot"><span>A clearer read on what comes next.</span><span>01 — 15</span></div>
+    </div>
+  </section>
+
+  <section class="assessment-workspace" id="assessment-workspace" hidden>
+    <div class="wrap">
+      <div class="assessment-progress-row">
+        <a class="assessment-back-link" href="index.html">← Crescita</a>
+        <span id="assessment-progress-label">QUESTION 01 OF 15</span>
+        <span id="assessment-code-label"></span>
+      </div>
+      <div class="assessment-progress-track" aria-hidden="true"><span id="assessment-progress-fill"></span></div>
+      <div class="assessment-question-layout">
+        <div class="assessment-question-copy">
+          <div class="eyebrow" id="question-category">The constraint</div>
+          <h2 class="serif" id="question-title" tabindex="-1" aria-live="polite" aria-atomic="true">How clearly do you know what is currently limiting your growth?</h2>
+          <p>Choose the answer that best reflects how things work today.</p>
+        </div>
+        <div class="assessment-options" id="answer-options" role="group" aria-labelledby="question-title"></div>
+      </div>
+      <div class="assessment-controls">
+        <button class="assessment-prev" id="previous-question" type="button">← Previous</button>
+        <div class="assessment-control-right"><span id="answer-hint">Select one answer to continue.</span><button class="button" id="next-question" type="button" disabled>Continue <span>→</span></button></div>
+      </div>
+      <p class="assessment-error" id="assessment-error" role="alert" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="assessment-results" id="assessment-results" hidden>
+    <div class="wrap">
+      <div class="assessment-result-top">
+        <div>
+          <div class="eyebrow">Your Growth Profile</div>
+          <p class="assessment-result-code">ASSESSMENT ID <strong id="result-code"></strong></p>
+        </div>
+        <a class="assessment-restart" href="assessment.html?new=1#assessment-intro">Start a new assessment ↗</a>
+      </div>
+      <div class="assessment-result-hero">
+        <div>
+          <span class="assessment-result-label">YOUR PROFILE</span>
+          <h1 class="serif" id="result-profile" tabindex="-1">No Dominant Profile</h1>
+        </div>
+        <p id="result-summary">No single pattern is strong enough to define the system.</p>
+      </div>
+      <section class="assessment-result-section">
+        <div class="assessment-result-section-head"><div><div class="eyebrow">Across your growth system</div><h2 class="serif">The signals in your answers.</h2></div><p>Growth moves through decisions, not a checklist. The shape changes when the constraint changes.</p></div>
+        <div class="assessment-score-grid" id="assessment-scores"></div>
+      </section>
+      <section class="assessment-next-layout">
+        <div>
+          <div class="eyebrow">Where we’d look first</div>
+          <h2 class="serif" id="result-first-title">The constraint determines the next move.</h2>
+          <p id="result-first-copy">Your responses don’t point to a single obvious constraint.</p>
+        </div>
+        <div class="assessment-investigation">
+          <span class="assessment-result-label">WHAT WE’D INVESTIGATE NEXT</span>
+          <div id="result-investigations"></div>
+        </div>
+      </section>
+      <section class="assessment-result-cta">
+        <div>
+          <div class="eyebrow">The next move</div>
+          <h2 class="serif">Let’s look at your growth system.</h2>
+          <p>Your answers stay attached to this assessment ID. When you book from this page, the ID is included in the Calendly booking link.</p>
+        </div>
+        <a class="button" id="assessment-booking-link" href="contact.html#growth-conversation">Talk through your results <span>→</span></a>
+      </section>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand"><a class="brand footer-logo" href="index.html" aria-label="Crescita home"><img class="footer-logo-mark" src="assets/crescita-footer-logo.svg" alt="Crescita"></a><p>Strategic Growth Partner<br>Your growth. Our responsibility.</p></div>
+      <nav class="footer-links" aria-label="Footer"><a href="how-we-work.html">How We Work</a><a href="growth-partnership.html">Growth Partnership</a><a href="assessment.html">Growth Assessment</a><a href="insights.html">Insights</a><a href="case-studies.html">Case Studies</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+    </div>
+    <div class="footer-bottom"><span>© Crescita. Strategic growth, together.</span><span>Built for the next move.</span></div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/site.js?v=hover-flow-20261013c"></script>
+<script src="assets/assessment-app.js"></script>
+</body>
+</html>
+
